@@ -6,6 +6,7 @@ import java.awt.*;
 public class LabelWindow implements FrameWindow {
     private JFrame frame;
     private JLabel label;
+    private boolean state = true;
 
     public LabelWindow(String title, int x, int y, int width, int height) {
         frame = createWindow(title, x, y, width, height);
@@ -15,10 +16,20 @@ public class LabelWindow implements FrameWindow {
         label.setText(msg);
         label.validate();
     }
+    @Override
     public void update(int n){
-        updateText(Integer.toString(n));
+        if(state) updateText(Integer.toString(n));
     }
 
+    public void startUpdate(){
+        state = true;
+    }
+
+    public void stopUpdate(){
+        state = false;
+    }
+
+    @Override
     public JPanel createPanel(int width, int height) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());

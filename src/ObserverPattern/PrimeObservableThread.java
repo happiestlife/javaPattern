@@ -1,20 +1,34 @@
 package ObserverPattern;
 
-public class PrimeObservableThread implements Runnable {
+import java.util.ArrayList;
+
+public class PrimeObservableThread implements Runnable, Subject {
     private static final int SLEEPTIME = 500;
 
     private int primeNumber;
     private int numCount;
     private boolean first = true;
     private boolean stopRunning = false;
-    private TextFieldWindow textFieldWindow;
-    private boolean textFieldState = true;
-    private LabelWindow labelWindow;
-    private boolean labelState = true;
+    private ArrayList<FrameWindow> observers;
 
-    public PrimeObservableThread(TextFieldWindow textFieldWindow, LabelWindow labelWindow) {
-        this.textFieldWindow = textFieldWindow;
-        this.labelWindow = labelWindow;
+    public PrimeObservableThread() {
+        observers = new ArrayList<>();
+    }
+
+    @Override
+    public void addObserver(FrameWindow frameWindow){
+        observers.add(frameWindow);
+    }
+    @Override
+    public void removeObserver(FrameWindow frameWindow){
+        if(observers.contains(frameWindow))
+            observers.remove(frameWindow);
+    }
+    @Override
+    public void notifyObserver(int primeNumber){
+        for(FrameWindow fw : observers){
+            fw.update(primeNumber);
+        }
     }
 
     public int getPrimeNumber() {
@@ -27,14 +41,6 @@ public class PrimeObservableThread implements Runnable {
 
     public void startRunning() {
         stopRunning = false;
-        run();
-    }
-
-    public void textFieldState(boolean state){
-        textFieldState = state;
-    }
-    public void labelState(boolean state){
-        labelState = state;
     }
 
     private void generatePrimeNumber() {
@@ -49,10 +55,7 @@ public class PrimeObservableThread implements Runnable {
                 if (isPrimeNumber(numCount)) {
                     primeNumber = numCount;
                     System.out.println(primeNumber);
-                    if(textFieldState)
-                        textFieldWindow.update(primeNumber);
-                    if(labelState)
-                        labelWindow.update(primeNumber);
+                    notifyObserver(primeNumber);
                 }
             }
             try {
@@ -75,7 +78,10 @@ public class PrimeObservableThread implements Runnable {
 
     @Override
     public void run() {
-        generatePrimeNumber();
+        while(true) {
+            System.out.println(stopRunning);
+            if(!stopRunning) generatePrimeNumber();
+        }
     }
 
 }

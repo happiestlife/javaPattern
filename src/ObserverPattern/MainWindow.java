@@ -13,6 +13,7 @@ public class MainWindow  implements ActionListener, FrameWindow {
     private static final String LABEL_ADD_OBSERVER_BUTTON_TITLE = "Add Label Window Observer";
     private static final String LABEL_REMOVE_OBSERVER_BUTTON_TITLE = "Remove Label Window Observer";
     private static final String STOP_THREAD_BUTTON_TITLE = "Stop Generating Prime Number";
+    private static final String START_THREAD_BUTTON_TITLE = "Start Generating Prime Number";
     private static final int X = 250;
     private static final int Y = 100;
     private static final int WIDTH = 600;
@@ -41,7 +42,9 @@ public class MainWindow  implements ActionListener, FrameWindow {
             }
         });
 
-        primeThread = new PrimeObservableThread(textFieldWindow, labelWindow); // ��ü ����
+        primeThread = new PrimeObservableThread(); // ��ü ����
+        primeThread.addObserver(textFieldWindow);
+        primeThread.addObserver(labelWindow);
 
         primeThread.run();  // �Ҽ� ���� ����. �� �Լ��� ����� �Ŀ��� stopButton�� ������ ������ ���� �ݺ���
     }
@@ -61,28 +64,33 @@ public class MainWindow  implements ActionListener, FrameWindow {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JButton bt = (JButton) e.getSource();
         if (e.getSource() == updateTextFieldObserverButton) {
-            JButton bt = (JButton) e.getSource();
             if(bt.getText() == TEXTFIELD_ADD_OBSERVER_BUTTON_TITLE){
-                primeThread.textFieldState(true);
                 updateTextFieldObserverButton.setText(TEXTFIELD_REMOVE_OBSERVER_BUTTON_TITLE);
+                textFieldWindow.startUpdate();
             }else{
-                primeThread.textFieldState(false);
                 updateTextFieldObserverButton.setText(TEXTFIELD_ADD_OBSERVER_BUTTON_TITLE);
+                textFieldWindow.stopUpdate();
             }
         }
         else if (e.getSource() == updateLabelObserverButton) {
-            JButton bt = (JButton) e.getSource();
             if(bt.getText() == LABEL_ADD_OBSERVER_BUTTON_TITLE){
-                primeThread.labelState(true);
                 updateLabelObserverButton.setText(LABEL_REMOVE_OBSERVER_BUTTON_TITLE);
+                labelWindow.startUpdate();
             }else{
-                primeThread.labelState(false);
                 updateLabelObserverButton.setText(LABEL_ADD_OBSERVER_BUTTON_TITLE);
+                labelWindow.stopUpdate();
             }
         }
         else if (e.getSource() == stopButton) {
-            primeThread.stopRunning();
+            if(bt.getText() == START_THREAD_BUTTON_TITLE){
+                stopButton.setText(STOP_THREAD_BUTTON_TITLE);
+                primeThread.startRunning();
+            }else{
+                stopButton.setText(START_THREAD_BUTTON_TITLE);
+                primeThread.stopRunning();
+            }
         }
     }
 
