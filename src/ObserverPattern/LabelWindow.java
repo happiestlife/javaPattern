@@ -17,17 +17,7 @@ public class LabelWindow implements FrameWindow {
         label.validate();
     }
     @Override
-    public void update(int n){
-        if(state) updateText(Integer.toString(n));
-    }
-
-    public void startUpdate(){
-        state = true;
-    }
-
-    public void stopUpdate(){
-        state = false;
-    }
+    public void update(int n){ if(state) updateText(Integer.toString(n)); }
 
     @Override
     public JPanel createPanel(int width, int height) {

@@ -21,8 +21,9 @@ public class PrimeObservableThread implements Runnable, Subject {
     }
     @Override
     public void removeObserver(FrameWindow frameWindow){
-        if(observers.contains(frameWindow))
+        if(observers.contains(frameWindow)) {
             observers.remove(frameWindow);
+        }
     }
     @Override
     public void notifyObserver(int primeNumber){
@@ -55,7 +56,7 @@ public class PrimeObservableThread implements Runnable, Subject {
                 if (isPrimeNumber(numCount)) {
                     primeNumber = numCount;
                     System.out.println(primeNumber);
-                    notifyObserver(primeNumber);
+                    if(!stopRunning) notifyObserver(primeNumber);
                 }
             }
             try {
@@ -79,8 +80,8 @@ public class PrimeObservableThread implements Runnable, Subject {
     @Override
     public void run() {
         while(true) {
-            System.out.println(stopRunning);
-            if(!stopRunning) generatePrimeNumber();
+            generatePrimeNumber();
+            System.out.println();
         }
     }
 

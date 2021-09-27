@@ -3,6 +3,7 @@ package ObserverPattern;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Observer;
 
 public class MainWindow  implements ActionListener, FrameWindow {
     private static final String MAIN_TITLE = "Main Window";
@@ -68,19 +69,19 @@ public class MainWindow  implements ActionListener, FrameWindow {
         if (e.getSource() == updateTextFieldObserverButton) {
             if(bt.getText() == TEXTFIELD_ADD_OBSERVER_BUTTON_TITLE){
                 updateTextFieldObserverButton.setText(TEXTFIELD_REMOVE_OBSERVER_BUTTON_TITLE);
-                textFieldWindow.startUpdate();
+                primeThread.addObserver( textFieldWindow);
             }else{
                 updateTextFieldObserverButton.setText(TEXTFIELD_ADD_OBSERVER_BUTTON_TITLE);
-                textFieldWindow.stopUpdate();
+                primeThread.removeObserver(textFieldWindow);
             }
         }
         else if (e.getSource() == updateLabelObserverButton) {
             if(bt.getText() == LABEL_ADD_OBSERVER_BUTTON_TITLE){
                 updateLabelObserverButton.setText(LABEL_REMOVE_OBSERVER_BUTTON_TITLE);
-                labelWindow.startUpdate();
+                primeThread.addObserver(labelWindow);
             }else{
                 updateLabelObserverButton.setText(LABEL_ADD_OBSERVER_BUTTON_TITLE);
-                labelWindow.stopUpdate();
+                primeThread.removeObserver(labelWindow);
             }
         }
         else if (e.getSource() == stopButton) {

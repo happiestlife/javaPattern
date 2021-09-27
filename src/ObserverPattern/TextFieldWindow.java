@@ -7,6 +7,7 @@ public class TextFieldWindow implements FrameWindow {
     private JFrame frame;
     private JTextField textField;
     private boolean state = true;
+    private String str = "text";
 
     public TextFieldWindow(String title, int x, int y, int width, int height) {
         frame = createWindow(title, x, y, width, height);
@@ -19,14 +20,6 @@ public class TextFieldWindow implements FrameWindow {
     @Override
     public void update(int n){
         if(state) updateText(Integer.toString(n));
-    }
-
-    public void startUpdate(){
-        state = true;
-    }
-
-    public void stopUpdate(){
-        state = false;
     }
 
     public JPanel createPanel(int width, int height) {
