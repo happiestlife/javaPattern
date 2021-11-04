@@ -1,12 +1,7 @@
 package DaoPattern;
 
-import sun.security.util.Password;
-import test.Person;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PasswordDaoWithSqlite implements PasswordDAO{
