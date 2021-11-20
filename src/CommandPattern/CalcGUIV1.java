@@ -11,11 +11,8 @@ public class CalcGUIV1 extends JFrame implements ActionListener {
     final static int BUTTON_WIDTH = 50;
 
     private String[] buttonText = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*", "/", "=" };
-    private JButton[] buttons = new JButton[buttonText.length];
+    private CommonButton[] buttons = new CommonButton[buttonText.length];
     private Calculator calculator;
-    private NumberCommand numberCommand;
-    private OperatorCommand operatorCommand;
-    private ResultCommand resultCommand;
 
     private Dimension displayDimension = new Dimension(WINDOW_WIDTH - 20, COMPONENT_HEIGHT);
     private Dimension buttonDimension = new Dimension(BUTTON_WIDTH, COMPONENT_HEIGHT);
@@ -25,9 +22,6 @@ public class CalcGUIV1 extends JFrame implements ActionListener {
     CalcGUIV1() {
         super("CalcGUIV1");
         calculator = new Calculator();
-        numberCommand = new NumberCommand(calculator, display);
-        operatorCommand = new OperatorCommand(calculator, display);
-        resultCommand = new ResultCommand(calculator, display);
 
         setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         Font labelFont = display.getFont();
@@ -52,13 +46,28 @@ public class CalcGUIV1 extends JFrame implements ActionListener {
     public JPanel getButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(5,3,10,5));
-        for (int i = 0; i < buttonText.length; i++) {
-            buttons[i] = new JButton();
+        for (int i = 0; i < 10; i++) {
+            buttons[i] = new NumberButton(calculator, display);
             buttons[i].setText(buttonText[i]);
             buttons[i].setPreferredSize(buttonDimension);
             buttons[i].addActionListener(this);
             buttonPanel.add(buttons[i]);
         }
+        for(int i = 10; i < 14; i++){
+            {
+                buttons[i] = new OperatorButton(calculator, display);
+                buttons[i].setText(buttonText[i]);
+                buttons[i].setPreferredSize(buttonDimension);
+                buttons[i].addActionListener(this);
+                buttonPanel.add(buttons[i]);
+            }
+        }
+        buttons[14] = new ResultButton(calculator, display);
+        buttons[14].setText(buttonText[14]);
+        buttons[14].setPreferredSize(buttonDimension);
+        buttons[14].addActionListener(this);
+        buttonPanel.add(buttons[14]);
+
         return buttonPanel;
     }
 
@@ -68,20 +77,8 @@ public class CalcGUIV1 extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JButton cmdButton = (JButton) e.getSource();
-        if (cmdButton == buttons[0] || cmdButton == buttons[1]  || cmdButton == buttons[2]  ||
-                cmdButton == buttons[3]  || cmdButton == buttons[4]  || cmdButton == buttons[5]  ||
-                cmdButton == buttons[6]  || cmdButton == buttons[7]  || cmdButton == buttons[8]  ||
-                cmdButton == buttons[9] ) { // 0-9 버튼
-            numberCommand.execute(cmdButton);
-        }
-        else if (cmdButton == buttons[14]) { // = 버튼
-            resultCommand.execute(cmdButton);
-        }
-        else if (cmdButton == buttons[10] || cmdButton == buttons[11] ||
-                cmdButton == buttons[12] || cmdButton == buttons[13]) { // +, -, *, / 버튼
-            operatorCommand.execute(cmdButton);
-        }
+        CommonButton cmdButton = (CommonButton) e.getSource();
+        cmdButton.execute();
     }
 
     public static void main(String[] args) {
